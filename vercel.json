@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd customer-menu && npm run build",
+  "outputDirectory": "customer-menu/dist",
+  "installCommand": "cd customer-menu && npm install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
