@@ -60,7 +60,10 @@ export default function App() {
   // (they need sturdier boxes), ₹5/item for everything else.
   const packingCharge =
     orderType === "takeaway"
-      ? Object.values(cart).reduce((sum, e) => sum + packingRateFor(e.item.category) * e.qty, 0)
+      ? Object.values(cart).reduce((sum, e) => {
+          if (/extra cheese/i.test(e.item.name)) return sum;
+          return sum + packingRateFor(e.item.category) * e.qty;
+        }, 0)
       : 0;
   const grandTotal = cartTotal + packingCharge;
 

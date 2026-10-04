@@ -3,10 +3,12 @@ import { parseSizeOptions, slugify } from "../utils/pricing";
 
 const isBestseller = (name) => /raghuveer spl|raghuveer special/i.test(name);
 const isSpicy = (name) => /chilli|peri peri/i.test(name);
+const isAddon = (name) => /extra cheese/i.test(name);
 
 export default function MenuItem({ item, cart, category, onAdd, onRemove, icon, color, delay = 0 }) {
   const bestseller = isBestseller(item.name);
   const spicy = isSpicy(item.name);
+  const addon = isAddon(item.name);
   const sizeOptions = parseSizeOptions(item);
   const [sizeIndex, setSizeIndex] = useState(0);
 
@@ -23,12 +25,17 @@ export default function MenuItem({ item, cart, category, onAdd, onRemove, icon, 
 
   return (
     <div className="tile" style={{ animationDelay: `${delay}s` }}>
-      <div className="tile-icon" style={{ background: color, boxShadow: `0 6px 14px ${color}55` }}>
-        <span>{icon}</span>
+      <div className="tile-icon" style={{ background: addon ? "#f59e0b" : color, boxShadow: `0 6px 14px ${color}55` }}>
+        <span>{addon ? "🧀" : icon}</span>
       </div>
       <div className="tile-tags">
         {bestseller && <span className="tag tag-best">🔥 Popular</span>}
         {spicy && <span className="tag tag-spicy">🌶 Spicy</span>}
+        {addon && (
+          <span className="tag" style={{ background: "#fef3c7", color: "#b45309", border: "1px solid #fde68a" }}>
+            🧀 Add-on
+          </span>
+        )}
       </div>
       <h3 className="tile-name">{item.name}</h3>
       {plainDesc && <p className="tile-desc">{plainDesc}</p>}
