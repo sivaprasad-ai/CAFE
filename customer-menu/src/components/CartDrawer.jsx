@@ -61,6 +61,52 @@ export default function CartDrawer({
               </div>
             ))
           )}
+
+          {entries.some((e) => e.item.category === "Pizza" && !/extra cheese/i.test(e.item.name)) &&
+            !entries.some((e) => /extra cheese/i.test(e.item.name)) && (
+              <div
+                style={{
+                  margin: "12px 0 6px",
+                  padding: "10px 14px",
+                  background: "#fffbeb",
+                  border: "1px dashed #f59e0b",
+                  borderRadius: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "8px",
+                  fontSize: "13px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#92400e", fontWeight: "600" }}>
+                  <span>🧀</span>
+                  <span>Add Extra Cheese?</span>
+                </div>
+                <button
+                  type="button"
+                  style={{
+                    background: "#f59e0b",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    padding: "5px 12px",
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    cursor: "pointer",
+                  }}
+                  onClick={() =>
+                    onAdd({
+                      id: "pz19",
+                      name: "Extra Cheese (6\")",
+                      price: 50,
+                      category: "Pizza",
+                    })
+                  }
+                >
+                  + ₹50
+                </button>
+              </div>
+            )}
         </div>
         <div className="cart-footer">
           {orderType === "takeaway" && packingCharge > 0 && (
