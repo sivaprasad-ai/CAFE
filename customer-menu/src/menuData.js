@@ -8,7 +8,8 @@ export const CATEGORY_META = {
   Maggi: { icon: "🍜", color: "#ef4444" },
   Burgers: { icon: "🍔", color: "#f97316" },
   Pasta: { icon: "🍝", color: "#ec4899" },
-  Nuggets: { icon: "🍗", color: "#eab308" },
+  "Veggie Fingers": { icon: "🥖", color: "#eab308" },
+  Nuggets: { icon: "🥖", color: "#eab308" },
   Momos: { icon: "🥟", color: "#14b8a6" },
   Sandwiches: { icon: "🥪", color: "#84cc16" },
   "Frankie Rolls": { icon: "🌯", color: "#f59e0b" },
@@ -78,7 +79,7 @@ export const MENU = [
     ],
   },
   {
-    category: "Nuggets",
+    category: "Veggie Fingers",
     items: [
       { id: "n1", name: "Veggie Fingers", price: 90, desc: "" },
       { id: "n2", name: "Chilli-Garlic Bites", price: 90, desc: "" },
@@ -218,7 +219,7 @@ export const MENU = [
       { id: "co4", name: "Mini Combo", price: 239, desc: "Veg Cheese Frankie Roll + Peri Peri Fries + Cold Coffee/Coke (was ₹280)" },
       { id: "co5", name: "Regular Combo A", price: 279, desc: "Sweet Corn + Veg Cheese Pizza (M) + Peri-Peri Fries + Coke/Cold Coffee (was ₹320)" },
       { id: "co6", name: "Regular Combo B", price: 229, desc: "White Pasta + Salted Fries + Coke/Cold Coffee (was ₹279)" },
-      { id: "co7", name: "Nuggets Fries Combo", price: 229, desc: "Cheese Corn Triangles + Peri-Peri Fries + Cold Coffee/Coke (was ₹260)" },
+      { id: "co7", name: "Veggie Fingers Combo", price: 229, desc: "Cheese Corn Triangles + Peri-Peri Fries + Cold Coffee/Coke (was ₹260)" },
       { id: "co8", name: "Special Combo", price: 249, desc: "Raghuveer Spl. Grill Sandwich + Spl. Fries + Chocolate Cold Coffee (was ₹370)" },
       { id: "co9", name: "Mini Combo B", price: 309, desc: "Spl. Burst Pizza (S) + Peri-Peri Fries + Cold Coffee/Coke (was ₹370)" },
       { id: "co10", name: "Special Combo B", price: 409, desc: "Spl. Burst Pizza (M) + Peri-Peri Fries + Cold Coffee (was ₹460)" },

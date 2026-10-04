@@ -9,7 +9,7 @@ const FEATURED_CATEGORIES = [
   { name: "Sandwiches", img: "/images/dish-sandwich.jpg" },
   { name: "Maggi", img: "/images/dish-maggi.jpg" },
   { name: "Cad-B Shakes", img: "/images/dish-cadbshake.jpg" },
-  { name: "Nuggets", img: "/images/dish-nuggets.jpg" },
+  { name: "Veggie Fingers", img: "/images/dish-nuggets.jpg" },
   { name: "Mastani", img: "/images/dish-mastani.jpg" },
 ];
 
