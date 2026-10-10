@@ -56,7 +56,7 @@ export default function App() {
   const cartCount = Object.values(cart).reduce((sum, e) => sum + e.qty, 0);
   const cartTotal = Object.values(cart).reduce((sum, e) => sum + e.qty * e.item.price, 0);
 
-  // Packing charge only applies to takeaway orders — ₹10/item for Burgers & Pizza
+  // Packing charge only applies to takeaway orders — ₹20/item for Combos, ₹10/item for Burgers & Pizza
   // (they need sturdier boxes), ₹5/item for everything else.
   const packingCharge =
     orderType === "takeaway"
