@@ -15,7 +15,7 @@ function useTableNumber() {
   return params.get("table") || "1";
 }
 
-export default function App() {
+export default function App({ onOpenOwner }) {
   const tableNumber = useTableNumber();
   const categories = useMemo(() => MENU.map((c) => c.category), []);
   const [activeCategory, setActiveCategory] = useState(categories[0]);
@@ -151,6 +151,7 @@ export default function App() {
           setPendingCategory(category || null);
         }}
         tableNumber={tableNumber}
+        onOpenOwner={onOpenOwner}
       />
     );
   }
@@ -238,9 +239,9 @@ export default function App() {
           </main>
           <footer className="menu-page-footer">
             <p>© {new Date().getFullYear()} Raghuveer Cafe</p>
-            <a href="/?owner" className="footer-owner-link">
+            <button type="button" onClick={onOpenOwner} className="footer-owner-link">
               🔒 Staff / Owner Portal
-            </a>
+            </button>
           </footer>
         </div>
       </div>

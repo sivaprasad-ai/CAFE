@@ -3,9 +3,7 @@ import { MENU, CATEGORY_META } from "../menuData";
 import { parseSizeOptions, slugify, packingRateFor } from "../utils/pricing";
 import { fetchOrders, createOrder, updateOrderStatus, deleteOrder, subscribeToOrders } from "../utils/api";
 import { whatsappSendUrl, normalizeIndianPhone } from "../utils/shareBill";
-
-// Allowed admin passwords
-const ALLOWED_ADMIN_PASSWORDS = ["Raghuveer@2001", "raghuveer@2001"];
+import { LoginGate, isOwnerAuthenticated, clearOwnerAuthenticated } from "../utils/auth";
 
 const COLUMNS = [
   { key: "new", label: "New", next: "preparing", actionLabel: "Start Preparing" },
@@ -506,67 +504,8 @@ function StaffMenuRow({ item, category, sizeOptions, cart, onAdd, onRemove }) {
   );
 }
 
-function LoginGate({ onSuccess }) {
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(false);
-
-  const submit = (e) => {
-    e.preventDefault();
-    if (ALLOWED_ADMIN_PASSWORDS.includes(password.trim())) {
-      sessionStorage.setItem("ownerAuthed", "1");
-      onSuccess();
-    } else {
-      setError(true);
-    }
-  };
-
-  return (
-    <div className="owner-login">
-      <form className="owner-login-card" onSubmit={submit}>
-        <div className="owner-login-logo">RC</div>
-        <h2>Admin Login</h2>
-        <p>Enter admin password to continue</p>
-        <div className="owner-login-field">
-          <input
-            type={showPassword ? "text" : "password"}
-            autoFocus
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError(false);
-            }}
-            placeholder="Enter password"
-          />
-          <button
-            type="button"
-            className="owner-password-toggle"
-            onClick={() => setShowPassword((prev) => !prev)}
-            aria-label={showPassword ? "Hide password" : "Show password"}
-          >
-            {showPassword ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" strokeLinecap="round" strokeLinejoin="round" />
-                <line x1="1" y1="1" x2="23" y2="23" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </button>
-        </div>
-        {error && <span className="owner-login-error">Incorrect password. Please try again.</span>}
-        <button type="submit" className="owner-btn owner-btn-advance">Login</button>
-      </form>
-    </div>
-  );
-}
-
-export default function OwnerDashboard() {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem("ownerAuthed") === "1");
+export default function OwnerDashboard({ onOpenQr, onExit }) {
+  const [authed, setAuthed] = useState(isOwnerAuthenticated);
   const [orders, setOrders] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [printOrder, setPrintOrder] = useState(null);
@@ -669,7 +608,7 @@ export default function OwnerDashboard() {
   const pendingCount = todayOrders.filter((o) => o.status !== "completed").length;
 
   if (!authed) {
-    return <LoginGate onSuccess={() => setAuthed(true)} />;
+    return <LoginGate onSuccess={() => setAuthed(true)} onCancel={onExit} />;
   }
 
   return (
@@ -688,23 +627,32 @@ export default function OwnerDashboard() {
           <span className="owner-clock">
             {now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
           </span>
-          <a
-            href="/?qr"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
             className="owner-btn"
-            style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px", background: "#f5eee6", border: "1px solid #d4c8bc", color: "#251d16" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#f5eee6", border: "1px solid #d4c8bc", color: "#251d16" }}
+            onClick={onOpenQr}
           >
-            📱 Table QRs (9)
-          </a>
+            📱 Table QRs
+          </button>
           <button className="owner-btn owner-btn-advance" onClick={() => setShowNewOrder(true)}>
             <IconPlus /> New Order
           </button>
+          {onExit && (
+            <button
+              className="owner-btn owner-btn-cancel"
+              onClick={onExit}
+              title="Return to customer menu"
+            >
+              ← Menu
+            </button>
+          )}
           <button
             className="owner-btn owner-btn-cancel"
             onClick={() => {
-              sessionStorage.removeItem("ownerAuthed");
+              clearOwnerAuthenticated();
               setAuthed(false);
+              if (onExit) onExit();
             }}
           >
             Logout

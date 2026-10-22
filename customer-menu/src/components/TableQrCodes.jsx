@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { LoginGate, isOwnerAuthenticated } from "../utils/auth";
 
 function drawRoundRect(ctx, x, y, width, height, radius, fill, stroke) {
   ctx.beginPath();
@@ -27,6 +28,7 @@ function loadImage(src) {
 }
 
 export default function TableQrCodes({ onClose }) {
+  const [authed, setAuthed] = useState(isOwnerAuthenticated);
   const defaultOrigin = typeof window !== "undefined" ? window.location.origin : "http://localhost:5173";
   const [baseUrl, setBaseUrl] = useState(defaultOrigin);
   const [tableCount, setTableCount] = useState(9);
@@ -178,10 +180,10 @@ export default function TableQrCodes({ onClose }) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // 9. Footer Target URL
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "14px 'SFMono-Regular', Menlo, Consolas, monospace";
-    ctx.fillText(targetUrl, width / 2, 970);
+    // 9. Footer Branding (clean, no raw URL)
+    ctx.fillStyle = "#78716c";
+    ctx.font = "600 16px 'Outfit', 'Inter', system-ui, sans-serif";
+    ctx.fillText("Raghuveer Cafe · Table " + tableNum, width / 2, 970);
 
     return canvas;
   };
@@ -229,6 +231,10 @@ export default function TableQrCodes({ onClose }) {
     link.target = "_blank";
     link.click();
   };
+
+  if (!authed) {
+    return <LoginGate onSuccess={() => setAuthed(true)} onCancel={onClose} />;
+  }
 
   return (
     <div className="table-qr-page">
@@ -333,7 +339,7 @@ export default function TableQrCodes({ onClose }) {
                 </div>
 
                 <div className="qr-card-footer">
-                  <span className="qr-url-text">{targetUrl}</span>
+                  <span className="qr-url-text">Raghuveer Cafe · Table {num}</span>
                 </div>
               </div>
 

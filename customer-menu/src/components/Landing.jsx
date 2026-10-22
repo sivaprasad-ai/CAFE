@@ -25,7 +25,7 @@ const INSTAGRAM_URL = "https://www.instagram.com/raghuveer_cafe";
 const MAPS_URL =
   "https://www.google.com/maps/place/Raghuveer+Cafe/@16.2377271,74.6047265,20.33z/data=!4m14!1m7!3m6!1s0x3bae0d006047a089:0xaaf3340bea7b8c35!2sRaghuveer!8m2!3d12.9466071!4d77.7620871!16s%2Fg%2F11ysqhdkyh!3m5!1s0x3bc0bda3a0dd8859:0xc3c75d02047e2c94!8m2!3d16.2380078!4d74.6046948!16s%2Fg%2F11xmxh2x75?entry=ttu&g_ep=EgoyMDI2MDgyNS4wIKXMDSoASAFQAw%3D%3D";
 
-export default function Landing({ onOrderNow, tableNumber }) {
+export default function Landing({ onOrderNow, tableNumber, onOpenOwner }) {
   const [showSticky, setShowSticky] = useState(false);
 
   useEffect(() => {
@@ -259,9 +259,9 @@ export default function Landing({ onOrderNow, tableNumber }) {
           <p className="footer-note">For franchise enquiries, call us directly</p>
           <p className="footer-credit">Developed by Amit Savalagi &amp; Siva Prasad</p>
           <div className="footer-staff-wrap">
-            <a href="/?owner" className="footer-owner-link">
+            <button type="button" onClick={onOpenOwner} className="footer-owner-link">
               🔒 Staff / Owner Portal
-            </a>
+            </button>
           </div>
         </div>
       </footer>
