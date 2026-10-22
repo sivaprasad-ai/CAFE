@@ -3625,23 +3625,56 @@ h1, h2, h3 {
 .qr-card-actions {
   background: #faf6f0;
   border-top: 1px solid #ebd5c0;
-  padding: 10px;
-  text-align: center;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .qr-download-btn {
   background: #ffffff;
   border: 1px solid #d4c7b8;
   border-radius: 8px;
-  padding: 6px 14px;
+  padding: 7px 14px;
   font-size: 12px;
   font-weight: 600;
   color: #433930;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
-.qr-download-btn:hover {
+.primary-download-btn {
+  background: #27170a;
+  color: #ffffff;
+  border-color: #27170a;
+  flex: 1;
+}
+
+.primary-download-btn:hover:not(:disabled) {
+  background: #452814;
+  color: #ffffff;
+}
+
+.primary-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.qr-download-btn-sub {
+  background: #ffffff;
+  border: 1px solid #d4c7b8;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #78716c;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.qr-download-btn-sub:hover {
   background: #f1e7db;
   color: #251d16;
 }
