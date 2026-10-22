@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MENU, CATEGORY_META } from "../menuData";
 import { parseSizeOptions, slugify, packingRateFor } from "../utils/pricing";
-import { fetchOrders, createOrder, updateOrderStatus, deleteOrder } from "../utils/api";
+import { fetchOrders, createOrder, updateOrderStatus, deleteOrder, subscribeToOrders } from "../utils/api";
 import { whatsappSendUrl, normalizeIndianPhone } from "../utils/shareBill";
 
 // Allowed admin passwords (supports custom password, admin123, or original 1234)
@@ -585,10 +585,14 @@ export default function OwnerDashboard() {
         .catch(() => {});
     };
     refresh();
-    const poll = setInterval(refresh, 3000);
+    const unsubscribe = subscribeToOrders(() => {
+      refresh();
+    });
+    const poll = setInterval(refresh, 4000);
     const clock = setInterval(() => setNow(new Date()), 30000);
     return () => {
       cancelled = true;
+      if (typeof unsubscribe === "function") unsubscribe();
       clearInterval(poll);
       clearInterval(clock);
     };

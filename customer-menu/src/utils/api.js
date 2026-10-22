@@ -1,9 +1,5 @@
-const LOCAL_API_DEFAULT =
-  typeof window !== "undefined" && window.location.hostname === "localhost"
-    ? "http://localhost:8001/api"
-    : "";
+import { supabase } from "./supabase";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || LOCAL_API_DEFAULT;
 const STORAGE_KEY = "raghuveer_cafe_orders";
 
 function getLocalOrders() {
@@ -34,7 +30,7 @@ function handleLocalRequest(path, options = {}) {
     const newOrder = {
       ...data,
       id: Date.now(),
-      placed_at: new Date().toISOString(),
+      placedAt: new Date().toISOString(),
       status: data.status || "new",
     };
     orders.unshift(newOrder);
@@ -66,30 +62,93 @@ function handleLocalRequest(path, options = {}) {
   return null;
 }
 
-async function request(path, options = {}) {
-  if (API_BASE) {
-    try {
-      const res = await fetch(`${API_BASE}${path}`, {
-        headers: { "Content-Type": "application/json" },
-        ...options,
-      });
-      if (!res.ok) throw new Error(`API ${path} failed: ${res.status}`);
-      if (res.status === 204) return null;
-      return await res.json();
-    } catch (err) {
-      console.warn(`API unreachable at ${API_BASE}${path}, using local store fallback`, err);
-    }
+export async function fetchOrders() {
+  try {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("placedAt", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.warn("Supabase fetch failed, using local store fallback:", err);
+    return handleLocalRequest("/orders/", { method: "GET" });
   }
-  return handleLocalRequest(path, options);
 }
 
-export const fetchOrders = () => request("/orders/");
+export async function createOrder(order) {
+  try {
+    const payload = {
+      table: String(order.table),
+      orderType: order.orderType || "dinein",
+      items: order.items,
+      subtotal: Number(order.subtotal),
+      packingCharge: Number(order.packingCharge || 0),
+      total: Number(order.total),
+      status: order.status || "new",
+      source: order.source || "customer",
+    };
+    const { data, error } = await supabase
+      .from("orders")
+      .insert([payload])
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.warn("Supabase create failed, using local store fallback:", err);
+    return handleLocalRequest("/orders/", { method: "POST", body: JSON.stringify(order) });
+  }
+}
 
-export const createOrder = (order) =>
-  request("/orders/", { method: "POST", body: JSON.stringify(order) });
+export async function updateOrderStatus(id, status) {
+  try {
+    const { data, error } = await supabase
+      .from("orders")
+      .update({ status })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.warn("Supabase update failed, using local store fallback:", err);
+    return handleLocalRequest(`/orders/${id}/status/`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    });
+  }
+}
 
-export const updateOrderStatus = (id, status) =>
-  request(`/orders/${id}/status/`, { method: "PATCH", body: JSON.stringify({ status }) });
+export async function deleteOrder(id) {
+  try {
+    const { error } = await supabase.from("orders").delete().eq("id", id);
+    if (error) throw error;
+    return null;
+  } catch (err) {
+    console.warn("Supabase delete failed, using local store fallback:", err);
+    return handleLocalRequest(`/orders/${id}/`, { method: "DELETE" });
+  }
+}
 
-export const deleteOrder = (id) => request(`/orders/${id}/`, { method: "DELETE" });
+export function subscribeToOrders(onUpdate) {
+  try {
+    const channel = supabase
+      .channel("orders_realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "orders" },
+        (payload) => {
+          if (onUpdate) onUpdate(payload);
+        }
+      )
+      .subscribe();
 
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  } catch (err) {
+    console.warn("Supabase subscription failed:", err);
+    return () => {};
+  }
+}
