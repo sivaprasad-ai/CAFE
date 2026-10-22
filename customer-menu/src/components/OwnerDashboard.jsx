@@ -506,6 +506,7 @@ function StaffMenuRow({ item, category, sizeOptions, cart, onAdd, onRemove }) {
 
 export default function OwnerDashboard({ onOpenQr, onExit }) {
   const [authed, setAuthed] = useState(isOwnerAuthenticated);
+  const [mobileTab, setMobileTab] = useState("new");
   const [orders, setOrders] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [printOrder, setPrintOrder] = useState(null);
@@ -689,9 +690,34 @@ export default function OwnerDashboard({ onOpenQr, onExit }) {
         Show older days too
       </label>
 
+      <div className="owner-mobile-tabs">
+        {columns.map((col) => (
+          <button
+            key={col.key}
+            type="button"
+            className={
+              "owner-mobile-tab-btn" +
+              (mobileTab === col.key ? " active tab-" + col.key : "")
+            }
+            onClick={() => setMobileTab(col.key)}
+          >
+            <span className="owner-mobile-tab-dot" />
+            <span>{col.label}</span>
+            <span className="owner-mobile-tab-count">{col.orders.length}</span>
+          </button>
+        ))}
+      </div>
+
       <div className="owner-kanban">
         {columns.map((col) => (
-          <div className={"owner-kanban-col col-" + col.key} key={col.key}>
+          <div
+            className={
+              "owner-kanban-col col-" +
+              col.key +
+              (mobileTab === col.key ? " mobile-active" : "")
+            }
+            key={col.key}
+          >
             <div className="owner-kanban-col-head">
               <span className="owner-kanban-col-title">
                 <span className="owner-kanban-dot" />

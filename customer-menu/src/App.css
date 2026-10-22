@@ -3171,13 +3171,267 @@ h1, h2, h3 {
   }
 }
 
+.owner-mobile-tabs {
+  display: none;
+}
+
 @media (max-width: 860px) {
-  .owner-kanban {
-    grid-template-columns: 1fr;
+  .owner-dashboard {
+    overflow-x: hidden;
+    padding-bottom: 40px;
   }
 
+  /* Header mobile adjustments */
+  .owner-header {
+    padding: 14px 16px;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .owner-header-left {
+    gap: 10px;
+  }
+
+  .owner-header-logo {
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .owner-header h1 {
+    font-size: 17px;
+  }
+
+  .owner-header p {
+    font-size: 11px;
+  }
+
+  .owner-header-right {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .owner-clock {
+    display: none;
+  }
+
+  .owner-header .owner-btn {
+    padding: 7px 11px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  /* Stats Bar: 3 columns in a single neat row */
   .owner-stats {
-    grid-template-columns: 1fr;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    padding: 0 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .owner-stat-card {
+    padding: 10px 6px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    border-radius: 12px;
+  }
+
+  .owner-stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .owner-stat-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .owner-stat-value {
+    font-size: 16px;
+  }
+
+  .owner-stat-label {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .owner-showall {
+    padding: 0 14px;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+
+  /* Mobile Tabs Switcher */
+  .owner-mobile-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 0 14px 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .owner-mobile-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 9px 6px;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .owner-mobile-tab-btn.active {
+    color: #1c1917;
+    border-color: #27170a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .owner-mobile-tab-btn.active.tab-new {
+    background: #eaf1ff;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+  }
+
+  .owner-mobile-tab-btn.active.tab-preparing {
+    background: #fdf3e0;
+    border-color: #f59e0b;
+    color: #b45309;
+  }
+
+  .owner-mobile-tab-btn.active.tab-completed {
+    background: #e9f9ee;
+    border-color: #22c55e;
+    color: #15803d;
+  }
+
+  .owner-mobile-tab-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .owner-mobile-tab-count {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 11px;
+  }
+
+  .owner-mobile-tab-btn.active .owner-mobile-tab-count {
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  /* Kanban on Mobile: Show selected column at 100% width */
+  .owner-kanban {
+    display: block;
+    padding: 0 14px;
+    max-width: 100%;
+  }
+
+  .owner-kanban-col {
+    display: none;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .owner-kanban-col.mobile-active {
+    display: flex;
+  }
+
+  .owner-kanban-col-head {
+    display: none;
+  }
+
+  .owner-kanban-col-body {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+    gap: 10px;
+  }
+
+  /* Order Card on Mobile */
+  .owner-order-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .owner-order-top {
+    gap: 8px;
+  }
+
+  .owner-order-table {
+    font-size: 15px;
+  }
+
+  .owner-order-items li {
+    font-size: 13px;
+    padding-bottom: 5px;
+  }
+
+  .owner-order-name {
+    word-break: break-word;
+  }
+
+  .owner-order-price {
+    flex-shrink: 0;
+  }
+
+  .owner-order-footer {
+    padding-top: 10px;
+    gap: 8px;
+  }
+
+  .owner-order-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .owner-order-actions .owner-btn-advance {
+    grid-column: span 2;
+  }
+
+  .owner-order-actions .owner-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+
+  /* Compact Order Head on Mobile */
+  .owner-order-compact-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+  }
+
+  .owner-order-compact-total {
+    margin-left: auto;
+    font-size: 14px;
   }
 }
 
