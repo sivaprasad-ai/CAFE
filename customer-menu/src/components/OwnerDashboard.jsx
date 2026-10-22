@@ -4,8 +4,8 @@ import { parseSizeOptions, slugify, packingRateFor } from "../utils/pricing";
 import { fetchOrders, createOrder, updateOrderStatus, deleteOrder, subscribeToOrders } from "../utils/api";
 import { whatsappSendUrl, normalizeIndianPhone } from "../utils/shareBill";
 
-// Allowed admin passwords (supports custom password, admin123, or original 1234)
-const ALLOWED_ADMIN_PASSWORDS = ["admin123", "admin", "raghuveer@123", "1234"];
+// Allowed admin passwords
+const ALLOWED_ADMIN_PASSWORDS = ["Raghuveer@2001", "raghuveer@2001"];
 
 const COLUMNS = [
   { key: "new", label: "New", next: "preparing", actionLabel: "Start Preparing" },

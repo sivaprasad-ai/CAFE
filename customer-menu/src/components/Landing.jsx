@@ -254,10 +254,15 @@ export default function Landing({ onOrderNow, tableNumber }) {
           </div>
         </div>
 
-        <div className="footer-bottom">
+          <div className="footer-bottom">
           <p>© {new Date().getFullYear()} Raghuveer Cafe. All rights reserved.</p>
           <p className="footer-note">For franchise enquiries, call us directly</p>
           <p className="footer-credit">Developed by Amit Savalagi &amp; Siva Prasad</p>
+          <div className="footer-staff-wrap">
+            <a href="/?owner" className="footer-owner-link">
+              🔒 Staff / Owner Portal
+            </a>
+          </div>
         </div>
       </footer>
 

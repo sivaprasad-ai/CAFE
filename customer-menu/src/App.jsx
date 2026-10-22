@@ -236,6 +236,12 @@ export default function App() {
               );
             })}
           </main>
+          <footer className="menu-page-footer">
+            <p>© {new Date().getFullYear()} Raghuveer Cafe</p>
+            <a href="/?owner" className="footer-owner-link">
+              🔒 Staff / Owner Portal
+            </a>
+          </footer>
         </div>
       </div>
 
