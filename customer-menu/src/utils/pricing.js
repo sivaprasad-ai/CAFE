@@ -22,8 +22,9 @@ export function slugify(label) {
   return label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-// ₹20/item packing charge for Combos, ₹10/item for Burgers & Pizza (sturdier boxes), ₹5/item otherwise.
+// ₹20/item packing charge for Combos, ₹10/item for Pizza, ₹5/item for Burgers & everything else.
 export function packingRateFor(category) {
   if (category === "Combos") return 20;
-  return category === "Burgers" || category === "Pizza" ? 10 : 5;
+  if (category === "Pizza") return 10;
+  return 5;
 }
