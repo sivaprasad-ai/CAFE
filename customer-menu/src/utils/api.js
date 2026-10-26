@@ -77,6 +77,9 @@ export async function fetchOrders() {
 }
 
 export async function createOrder(order) {
+  if (!order.table || order.table === "null" || order.table === "undefined" || !String(order.table).trim()) {
+    throw new Error("A valid Table number is required to place an order.");
+  }
   try {
     const payload = {
       table: String(order.table),

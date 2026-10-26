@@ -11,8 +11,18 @@ export default function CartDrawer({
   placing,
   onAdd,
   onRemove,
+  tableNumber,
 }) {
   const entries = Object.values(cart);
+  const whatsappText =
+    entries.length > 0
+      ? encodeURIComponent(
+          `Hello Raghuveer Cafe! I would like to order (${orderType === "takeaway" ? "Takeaway" : "Dine-in"}):\n` +
+            entries.map((e) => `• ${e.item.name} x ${e.qty} = ₹${e.item.price * e.qty}`).join("\n") +
+            (orderType === "takeaway" && packingCharge > 0 ? `\n• Packing Charge: ₹${packingCharge}` : "") +
+            `\n\nTotal: ₹${grandTotal}`
+        )
+      : "";
 
   return (
     <>
@@ -125,13 +135,43 @@ export default function CartDrawer({
             <span>To Pay</span>
             <span>₹{grandTotal}</span>
           </div>
-          <button
-            className="place-order-btn"
-            disabled={entries.length === 0 || placing}
-            onClick={onPlaceOrder}
-          >
-            {placing ? "Placing Order…" : `Place Order · ₹${grandTotal}`}
-          </button>
+          {!tableNumber ? (
+            <>
+              <div className="cart-qr-warning">
+                <span className="cart-qr-warning-icon">📷</span>
+                <div className="cart-qr-warning-text">
+                  <strong>Dining at Raghuveer Cafe?</strong>
+                  <p>Please scan the QR code on your table to send this order to our kitchen.</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="place-order-btn"
+                disabled
+                title="Scan table QR code to order"
+              >
+                📷 Scan Table QR to Order
+              </button>
+              {entries.length > 0 && (
+                <a
+                  href={`https://wa.me/918123202170?text=${whatsappText}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="whatsapp-order-btn"
+                >
+                  💬 Order via WhatsApp Instead
+                </a>
+              )}
+            </>
+          ) : (
+            <button
+              className="place-order-btn"
+              disabled={entries.length === 0 || placing}
+              onClick={onPlaceOrder}
+            >
+              {placing ? "Placing Order…" : `Place Order · ₹${grandTotal}`}
+            </button>
+          )}
         </div>
       </div>
     </>

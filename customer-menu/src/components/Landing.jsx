@@ -47,7 +47,7 @@ export default function Landing({ onOrderNow, tableNumber, onOpenOwner }) {
         {tableNumber && <span className="landing-table-badge">Table {tableNumber}</span>}
 
         <button className="landing-cta" onClick={onOrderNow}>
-          Order Now <span className="arrow">→</span>
+          {tableNumber ? "Order Now" : "Explore Menu"} <span className="arrow">→</span>
         </button>
       </div>
 
@@ -280,7 +280,7 @@ export default function Landing({ onOrderNow, tableNumber, onOpenOwner }) {
         className={"sticky-order-btn" + (showSticky ? " visible" : "")}
         onClick={onOrderNow}
       >
-        Order Now <span className="arrow">→</span>
+        {tableNumber ? "Order Now" : "Explore Menu"} <span className="arrow">→</span>
       </button>
     </div>
   );

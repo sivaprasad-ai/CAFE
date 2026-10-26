@@ -12,7 +12,8 @@ import "./App.css";
 
 function useTableNumber() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("table") || "1";
+  const t = params.get("table");
+  return t && t.trim() ? t.trim() : null;
 }
 
 export default function App({ onOpenOwner }) {
@@ -104,6 +105,10 @@ export default function App({ onOpenOwner }) {
   const [placingOrder, setPlacingOrder] = useState(false);
 
   const placeOrder = async () => {
+    if (!tableNumber) {
+      alert("Please scan the QR code on your table to place an order.");
+      return;
+    }
     if (cartCount === 0 || placingOrder) return;
 
     const order = {
@@ -168,7 +173,11 @@ export default function App({ onOpenOwner }) {
               <h1>Raghuveer Cafe</h1>
               <p className="brand-sub">AC Cafe · A Smile In Every Bite</p>
             </div>
-            <span className="table-badge">Table {tableNumber}</span>
+            {tableNumber ? (
+              <span className="table-badge">Table {tableNumber}</span>
+            ) : (
+              <span className="table-badge menu-only-badge">Menu</span>
+            )}
           </div>
           <div className="search-wrap">
             <SearchBar value={query} onChange={setQuery} />
@@ -268,6 +277,7 @@ export default function App({ onOpenOwner }) {
         placing={placingOrder}
         onAdd={addItem}
         onRemove={removeItem}
+        tableNumber={tableNumber}
       />
 
       <OrderSuccess order={placedOrder} onClose={() => setPlacedOrder(null)} />
